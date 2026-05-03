@@ -23,7 +23,7 @@ export default function StudentProfile() {
           <h3 className="font-bold text-xl mb-3">Job history</h3>
           <div className="space-y-2">
             {(student.job_history || []).map((h,i)=>(
-              <div key={i} className="border-b-2 border-dashed border-black/20 pb-2 last:border-0">
+              <div key={`${h.job_id}-${h.started_at}-${i}`} className="border-b-2 border-dashed border-black/20 pb-2 last:border-0">
                 <div className="font-bold">{h.title}</div>
                 <div className="text-xs text-black/50">{new Date(h.started_at).toLocaleDateString()} · ${h.salary}/wk</div>
               </div>

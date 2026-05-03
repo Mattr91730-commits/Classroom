@@ -2,7 +2,7 @@
 import os, requests, pytest
 
 BASE = os.environ.get('REACT_APP_BACKEND_URL', 'https://student-bank-hub.preview.emergentagent.com').rstrip('/')
-TEACHER_TOKEN = 'test_session_classbank'
+TEACHER_TOKEN = os.environ.get('TEST_TEACHER_TOKEN', 'test_session_classbank')
 H = {"Authorization": f"Bearer {TEACHER_TOKEN}", "Content-Type": "application/json"}
 
 # module-level state for cross-test sharing

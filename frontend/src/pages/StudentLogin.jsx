@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { toast } from "sonner";
@@ -26,13 +26,13 @@ export default function StudentLogin() {
     }
   };
 
-  const submitPin = async () => {
-    if (pin.length !== 4) return toast.error("Enter 4 digits");
+  const submitPin = useCallback(async (pinValue) => {
+    if (pinValue.length !== 4) return toast.error("Enter 4 digits");
     try {
       await api.post("/auth/student/login", {
         classroom_username: classroomUsername.trim().toLowerCase(),
         student_id: studentId,
-        pin,
+        pin: pinValue,
       });
       navigate("/student");
       window.location.reload();
@@ -40,9 +40,11 @@ export default function StudentLogin() {
       toast.error("Wrong PIN. Try again!");
       setPin("");
     }
-  };
+  }, [classroomUsername, studentId, navigate]);
 
-  useEffect(() => { if (pin.length === 4 && studentId) submitPin(); /* eslint-disable-next-line */ }, [pin]);
+  useEffect(() => {
+    if (pin.length === 4 && studentId) submitPin(pin);
+  }, [pin, studentId, submitPin]);
 
   return (
     <div className="min-h-screen bg-yellow-100 font-student p-6 flex items-center justify-center">

@@ -50,14 +50,14 @@ export default function Applications() {
               {open && (
                 <div className="border-t border-slate-100 px-5 py-4 space-y-3">
                   <div className="text-xs text-slate-500 font-medium">QUESTIONS</div>
-                  <ol className="list-decimal list-inside space-y-1 text-sm text-slate-700">{a.questions.map((q,i)=><li key={i}>{q}</li>)}</ol>
+                  <ol className="list-decimal list-inside space-y-1 text-sm text-slate-700">{a.questions.map((q,i)=><li key={`${a.application_id}-q-${i}`}>{q}</li>)}</ol>
                   <div className="text-xs text-slate-500 font-medium pt-3">RESPONSES</div>
                   {resp.length===0 ? <div className="text-sm text-slate-400">No responses yet</div> : resp.map(r=>(
                     <div key={r.response_id} className="bg-slate-50 rounded-lg p-3">
                       <div className="font-medium text-sm text-slate-900 mb-2">{r.student_name} <span className="text-xs text-slate-400 font-normal">{new Date(r.submitted_at).toLocaleString()}</span></div>
                       <div className="space-y-1 text-sm">
                         {a.questions.map((q,i)=>(
-                          <div key={i}><span className="text-slate-500">{q}:</span> <span className="text-slate-800">{r.answers[i] || "—"}</span></div>
+                          <div key={`${r.response_id}-a-${i}`}><span className="text-slate-500">{q}:</span> <span className="text-slate-800">{r.answers[i] || "—"}</span></div>
                         ))}
                       </div>
                     </div>
@@ -79,6 +79,9 @@ export default function Applications() {
               <div>
                 <div className="text-xs text-slate-500 mb-1 font-medium">Questions</div>
                 {questions.map((q,i)=>(
+                  // index is the correct key here: questions is an editable list where content
+                  // changes on every keystroke; a content-based key would steal input focus
+                  // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="flex gap-2 mb-2">
                     <input data-testid={`app-q-${i}`} value={q} onChange={e=>setQuestions(questions.map((x,j)=>j===i?e.target.value:x))} placeholder={`Question ${i+1}`} className="flex-1 border border-slate-200 rounded-md px-3 py-2 text-sm"/>
                     {questions.length>1 && <button onClick={()=>setQuestions(questions.filter((_,j)=>j!==i))} className="px-2 text-red-500"><Trash2 className="w-4 h-4"/></button>}

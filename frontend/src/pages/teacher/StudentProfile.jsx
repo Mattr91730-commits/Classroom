@@ -40,7 +40,7 @@ export default function StudentProfile() {
           <h3 className="font-teacher-heading font-semibold text-slate-900 mb-3 flex items-center gap-2"><Briefcase className="w-4 h-4"/> Job history</h3>
           <div className="space-y-2">
             {(student.job_history || []).map((h,i)=>(
-              <div key={i} className="text-sm flex justify-between border-b border-slate-100 pb-2 last:border-0">
+              <div key={`${h.job_id}-${h.started_at}-${i}`} className="text-sm flex justify-between border-b border-slate-100 pb-2 last:border-0">
                 <div><div className="font-medium text-slate-900">{h.title}</div><div className="text-xs text-slate-500">{new Date(h.started_at).toLocaleDateString()}</div></div>
                 <div className="text-emerald-600 text-sm font-medium">+{sym}{h.salary}/wk</div>
               </div>

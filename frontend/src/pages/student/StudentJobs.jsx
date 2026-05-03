@@ -70,7 +70,7 @@ export default function StudentJobs() {
             ) : (
               <div className="space-y-3">
                 {application.questions.map((q,i)=>(
-                  <div key={i}>
+                  <div key={`${application.application_id}-q-${i}`}>
                     <div className="font-bold text-sm mb-1">{i+1}. {q}</div>
                     <textarea data-testid={`answer-${i}`} value={answers[i]} onChange={e=>setAnswers(answers.map((a,j)=>j===i?e.target.value:a))} rows={2} className="input-brutal w-full"/>
                   </div>
