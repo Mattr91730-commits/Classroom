@@ -17,7 +17,7 @@ export default function Landing() {
             <div className="w-9 h-9 rounded-lg bg-slate-900 grid place-items-center">
               <Coins className="w-5 h-5 text-yellow-300" strokeWidth={2.4} />
             </div>
-            <span className="font-teacher-heading font-bold text-xl text-slate-900">ClassBank</span>
+            <span className="font-teacher-heading font-bold text-xl text-slate-900">My Classroom Economy</span>
           </div>
           <Link to="/student-login" data-testid="student-portal-link" className="text-sm font-medium text-slate-700 hover:text-slate-900">
             Student portal →

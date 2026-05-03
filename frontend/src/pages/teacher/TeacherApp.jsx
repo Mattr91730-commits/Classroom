@@ -32,7 +32,7 @@ export default function TeacherApp() {
         <div className="px-5 py-5 border-b border-slate-200 flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-slate-900 grid place-items-center"><Coins className="w-4 h-4 text-yellow-300"/></div>
           <div>
-            <div className="font-teacher-heading font-bold text-slate-900">ClassBank</div>
+            <div className="font-teacher-heading font-bold text-slate-900 text-sm leading-tight">My Classroom Economy</div>
             <div className="text-xs text-slate-500 truncate max-w-[140px]">{user?.classroom_name}</div>
           </div>
         </div>

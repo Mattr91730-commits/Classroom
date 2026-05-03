@@ -1,5 +1,5 @@
 """
-ClassBank Backend - FastAPI server
+My Classroom Economy Backend - FastAPI server
 Classroom economy app with Emergent Google Auth (teachers) and PIN auth (students).
 """
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response, UploadFile, File, Form, Header, Query
@@ -228,7 +228,7 @@ async def startup():
 
 @api_router.get("/")
 async def root():
-    return {"app": "ClassBank", "version": "1.0"}
+    return {"app": "My Classroom Economy", "version": "1.0"}
 
 # ---- Auth ----
 @api_router.post("/auth/google/session")

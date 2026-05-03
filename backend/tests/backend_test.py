@@ -14,7 +14,7 @@ def api(method, path, **kw):
 def test_root():
     r = api("GET", "/")
     assert r.status_code == 200
-    assert r.json().get("app") == "ClassBank"
+    assert r.json().get("app") == "My Classroom Economy"
 
 def test_auth_me_teacher():
     r = api("GET", "/auth/me", headers=H)

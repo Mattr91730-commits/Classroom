@@ -12,7 +12,7 @@ export default function StudentApp() {
     <div className="min-h-screen bg-yellow-100 font-student">
       <header className="border-b-[3px] border-black bg-white">
         <div className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-3">
-          <div className="font-bold text-2xl">🪙 ClassBank</div>
+          <div className="font-bold text-xl sm:text-2xl">🪙 My Classroom Economy</div>
           <div className="flex items-center gap-2">
             <div className="hidden sm:block px-3 py-1.5 bg-yellow-300 border-[3px] border-black rounded-xl text-sm font-bold">Hi, {user?.name}!</div>
             <button data-testid="student-logout" onClick={logout} className="btn-brutal bg-red-300 text-sm px-3 py-2 inline-flex items-center gap-1"><LogOut className="w-4 h-4"/> Out</button>
