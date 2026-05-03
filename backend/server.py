@@ -16,16 +16,17 @@ from datetime import datetime, timezone, timedelta
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 import os
+from pymongo import MongoClient
 
 mongo_url = os.getenv("MONGO_URL")
 
-print("===== DEBUG START =====")
-print("MONGO_URL VALUE:", mongo_url)
-print("===== DEBUG END =====")
+if not mongo_url:
+    raise Exception("MONGO_URL is missing")
 
-if not mongo_url or "mongodb" not in mongo_url:
-    raise Exception("MONGO_URL is missing OR invalid")
-db = client[os.environ['DB_NAME']]
+client = MongoClient(mongo_url)
+
+db_name = os.getenv("DB_NAME", "test")  # fallback if not set
+db = client[db_name]
 
 APP_NAME = os.environ.get('APP_NAME', 'classbank')
 EMERGENT_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
