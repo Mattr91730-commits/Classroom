@@ -25,9 +25,8 @@ if not mongo_url:
 
 client = MongoClient(mongo_url)
 
-db_name = os.getenv("DB_NAME", "test")  # fallback if not set
+db_name = os.getenv("DB_NAME", "test")
 db = client[db_name]
-
 APP_NAME = os.environ.get('APP_NAME', 'classbank')
 EMERGENT_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
