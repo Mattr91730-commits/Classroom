@@ -1,0 +1,143 @@
+{
+  "theme_strategy": {
+    "base_theme": "hybrid_light",
+    "rationale": "The app demands a dual-persona architecture. We use a shared Light theme base to maintain structural unity, but diverge aggressively in execution. The Teacher View uses Archetype 4 (Swiss & High-Contrast) for a data-dense, Ramp/Stripe-inspired fintech aesthetic. The Student View uses a variation of Archetype 6 (Vibrant Play) infused with Neo-Brutalism (thick borders, high-saturation colors, hard shadows) to feel like a tactile arcade game.",
+    "teacher_archetype": "Archetype 4 (Swiss & High-Contrast) - Objective, rigid, functional.",
+    "student_archetype": "Archetype 6 (Vibrant Play + Neo-Brutalism) - Game-like, tactile, energetic."
+  },
+  "color_palette": {
+    "shared_neutrals": {
+      "background": "#F8FAFC",
+      "surface": "#FFFFFF",
+      "text_main": "#0F172A",
+      "text_muted": "#64748B",
+      "border_subtle": "#E2E8F0"
+    },
+    "teacher_view": {
+      "primary": "#0F172A",
+      "primary_foreground": "#FFFFFF",
+      "accent": "#2563EB",
+      "success": "#16A34A",
+      "danger": "#DC2626",
+      "surface_styles": "Flat solid surfaces. 1px slate-200 borders. Soft shadow-sm for elevation."
+    },
+    "student_view": {
+      "primary": "#FDE047",
+      "primary_foreground": "#000000",
+      "secondary": "#86EFAC",
+      "secondary_foreground": "#000000",
+      "accent": "#93C5FD",
+      "danger": "#FCA5A5",
+      "surface_styles": "Neo-brutalist surfaces. White or vibrant backgrounds, 3px solid black borders, hard block shadows."
+    }
+  },
+  "typography": {
+    "setup_instructions": "Add Google Fonts imports for 'Outfit', 'IBM Plex Sans', and 'Fredoka' to index.css or index.html.",
+    "teacher_view": {
+      "headings": {
+        "family": "'Outfit', sans-serif",
+        "weight": "font-semibold to font-bold",
+        "tracking": "tracking-tight",
+        "usage": "Use for dashboard section titles, metric numbers, and modal headers. text-slate-900."
+      },
+      "body": {
+        "family": "'IBM Plex Sans', sans-serif",
+        "weight": "font-normal to font-medium",
+        "usage": "Use for data tables, transaction logs, job descriptions."
+      }
+    },
+    "student_view": {
+      "headings": {
+        "family": "'Fredoka', sans-serif",
+        "weight": "font-bold",
+        "tracking": "tracking-normal",
+        "usage": "Use for massive balance displays (text-5xl to text-6xl), store item names, alert banners."
+      },
+      "body": {
+        "family": "'Fredoka', sans-serif",
+        "weight": "font-medium",
+        "usage": "Maintain chunky, playful readability throughout the student experience."
+      }
+    }
+  },
+  "layout_and_spacing": {
+    "teacher_view": {
+      "grid_system": "MODE B: THE 'CONTROL ROOM' GRID. Tight gaps (gap-4 or gap-6). grid-cols-1 md:grid-cols-3 lg:grid-cols-4. High density.",
+      "padding": "Standard generous padding (p-6) inside dashboard cards.",
+      "alignment": "Strict left-alignment for data tables and logs. Center alignment only for empty states."
+    },
+    "student_view": {
+      "grid_system": "MODE A: THE 'TETRIS' / 'BENTO' GRID. Generous gaps (gap-6 to gap-8). Mix tall and wide cards to break symmetry.",
+      "padding": "Extra generous padding (p-6 to p-8). Keep content breathable.",
+      "alignment": "Center alignment for hero balances and CTA blocks. Left alignment for job listings."
+    }
+  },
+  "components_strategy": {
+    "buttons": {
+      "teacher": "Shadcn default variant, rounded-md, sleek hover states (hover:bg-slate-800).",
+      "student": "Neo-brutalist custom. rounded-xl, border-[3px] border-black, bg-yellow-400, shadow-[4px_4px_0px_rgba(0,0,0,1)]. Active state: translate-x-[2px] translate-y-[2px] shadow-[2px_2px_0px_rgba(0,0,0,1)]."
+    },
+    "cards": {
+      "teacher": "Minimalist. bg-white, rounded-xl, border border-slate-200, shadow-sm. No gradient backgrounds.",
+      "student": "Playful blocks. bg-white or pastel, rounded-2xl, border-[3px] border-black, shadow-[6px_6px_0px_rgba(0,0,0,1)]."
+    },
+    "tables_and_lists": {
+      "teacher": "Standard Shadcn tables. Compact padding, hover-row highlights. Sticky headers for long student lists.",
+      "student": "Avoid traditional tables. Use a feed of distinct, chunky list items (cards) stacked vertically with gap-4."
+    },
+    "inputs_and_forms": {
+      "teacher": "Shadcn inputs. Focus ring: focus:ring-2 focus:ring-slate-900.",
+      "student": "Chunky inputs. p-4, text-lg, border-[3px] border-black, rounded-xl."
+    }
+  },
+  "motion_and_interactions": {
+    "teacher_view": {
+      "animations": "Subtle and functional. Fade-in for modals, quick slide-up for toast notifications.",
+      "hover_states": "Color shifts only (e.g., bg-slate-50 to bg-slate-100). No scaling."
+    },
+    "student_view": {
+      "animations": "Celebratory. Bouncing entrances for coins, staggered pop-ins for store items.",
+      "microinteractions": "Buttons physically press down (translate-y) on click. Earning money should trigger a framer-motion floating +1 effect or similar.",
+      "libraries": "framer-motion for bouncy spring animations."
+    }
+  },
+  "accessibility_and_testing": {
+    "contrast": "Strict adherence to APCA standards. All text on colored backgrounds must be readable (e.g., black text on yellow/green/blue pastel backgrounds).",
+    "focus_states": "MANDATORY clear focus states for keyboard navigation.",
+    "testing": "All interactive elements MUST include a 'data-testid' attribute (e.g., data-testid='student-pay-all-button', data-testid='job-apply-submit'). Role-based naming, kebab-case."
+  },
+  "icons_and_assets": {
+    "library": "lucide-react for Teacher View (clean, thin lines). lucide-react with strokeWidth={3} for Student View to match the chunky aesthetic.",
+    "image_urls": [
+      {
+        "category": "classroom_hero_placeholder",
+        "url": "https://images.unsplash.com/photo-1567057420215-0afa9aa9253a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHw0fHxzY2hvb2wlMjBjbGFzc3Jvb20lMjBraWRzJTIwbGVhcm5pbmd8ZW58MHx8fHwxNzc3ODQxMTM5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Children studying, suitable for teacher dashboard empty states or login screens."
+      },
+      {
+        "category": "store_product_toy",
+        "url": "https://images.unsplash.com/photo-1585670874967-864decf78ccc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwyfHxzdGF0aW9uZXJ5JTIwdG95cyUyMGN1dGV8ZW58MHx8fHwxNzc3ODQxMTM5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Cute plastic animal toy, ideal placeholder for classroom store rewards."
+      },
+      {
+        "category": "store_product_stationery",
+        "url": "https://images.unsplash.com/photo-1761199466603-25ad1f785a11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwxfHxzdGF0aW9uZXJ5JTIwdG95cyUyMGN1dGV8ZW58MHx8fHwxNzc3ODQxMTM5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Piglet toy on folders, suitable for store rewards."
+      },
+      {
+        "category": "coins_wealth_symbol",
+        "url": "https://images.unsplash.com/photo-1755369394394-685cd2ea3140?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwyfHxnb2xkJTIwY29pbnMlMjBzdGFja2VkfGVufDB8fHx8MTc3Nzg0MTE0OXww&ixlib=rb-4.1.0&q=85",
+        "description": "Stacks of gold coins. Can be used in Student View hero background (with heavy opacity reduction/blur) or for Bank imagery."
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Implement the Dual-Persona layout explicitly: Use separate layout wrappers for '/teacher/*' and '/student/*' routes.",
+    "Teacher routes must be strictly professional (Fintech style). Rely on native Shadcn UI defaults with minor tweaks.",
+    "Student routes must feel like a game. Override Shadcn styles via className to apply the Neo-Brutalist borders and block shadows.",
+    "Ensure 'Pay All' modal and 'End of week salary' buttons are prominently accessible in the Teacher dashboard.",
+    "For the student PIN login, use a custom chunky 4-digit keypad interface, not a standard text input.",
+    "Do NOT use 'Inter' for any headings.",
+    "Apply 'data-testid' to EVERY button, input, and interactive card."
+  ]
+}
