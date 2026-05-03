@@ -447,20 +447,25 @@ async def assign_job(body: AssignJob, teacher: dict = Depends(get_current_teache
     await db.students.update_one({"student_id": body.student_id}, op)
     return {"ok": True}
 
+from pymongo import UpdateOne
+
 @api_router.post("/jobs/pay-salaries")
 async def pay_salaries(teacher: dict = Depends(get_current_teacher)):
     students = await db.students.find({"teacher_id": teacher["user_id"], "job_id": {"$ne": None}}, {"_id": 0}).to_list(500)
     job_ids = list({s["job_id"] for s in students if s.get("job_id")})
     jobs_list = await db.jobs.find({"job_id": {"$in": job_ids}}, {"_id": 0}).to_list(500)
     jobs_dict = {j["job_id"]: j for j in jobs_list}
+    now_iso = datetime.now(timezone.utc).isoformat()
+    balance_ops = []
+    txn_docs = []
     paid = []
     for s in students:
         job = jobs_dict.get(s["job_id"])
         if not job:
             continue
         amount = float(job["salary"])
-        await db.students.update_one({"student_id": s["student_id"]}, {"$inc": {"balance": amount}})
-        await db.transactions.insert_one({
+        balance_ops.append(UpdateOne({"student_id": s["student_id"]}, {"$inc": {"balance": amount}}))
+        txn_docs.append({
             "txn_id": f"txn_{uuid.uuid4().hex[:10]}",
             "teacher_id": teacher["user_id"],
             "student_id": s["student_id"],
@@ -468,9 +473,12 @@ async def pay_salaries(teacher: dict = Depends(get_current_teacher)):
             "amount": amount,
             "category": f"Salary: {job['title']}",
             "note": "Weekly salary",
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_at": now_iso,
         })
         paid.append({"student_id": s["student_id"], "name": s["name"], "amount": amount})
+    if balance_ops:
+        await db.students.bulk_write(balance_ops)
+        await db.transactions.insert_many(txn_docs)
     return {"paid": paid, "count": len(paid)}
 
 # ---- Pay All (mass reward / fine) ----
@@ -620,18 +628,23 @@ async def charge_bill(body: ChargeBillRequest, teacher: dict = Depends(get_curre
     bill = await db.bills.find_one({"bill_id": body.bill_id, "teacher_id": teacher["user_id"]}, {"_id": 0})
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
-    for sid in body.student_ids:
-        await db.students.update_one({"student_id": sid, "teacher_id": teacher["user_id"]}, {"$inc": {"balance": -float(bill["amount"])}})
-        await db.transactions.insert_one({
+    amount = -float(bill["amount"])
+    now_iso = datetime.now(timezone.utc).isoformat()
+    if body.student_ids:
+        await db.students.update_many(
+            {"student_id": {"$in": body.student_ids}, "teacher_id": teacher["user_id"]},
+            {"$inc": {"balance": amount}},
+        )
+        await db.transactions.insert_many([{
             "txn_id": f"txn_{uuid.uuid4().hex[:10]}",
             "teacher_id": teacher["user_id"],
             "student_id": sid,
             "type": "bill",
-            "amount": -float(bill["amount"]),
+            "amount": amount,
             "category": f"Bill: {bill['name']}",
             "note": "",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
+            "created_at": now_iso,
+        } for sid in body.student_ids])
     return {"ok": True, "count": len(body.student_ids)}
 
 # ---- Applications ----
