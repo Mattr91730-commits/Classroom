@@ -450,9 +450,12 @@ async def assign_job(body: AssignJob, teacher: dict = Depends(get_current_teache
 @api_router.post("/jobs/pay-salaries")
 async def pay_salaries(teacher: dict = Depends(get_current_teacher)):
     students = await db.students.find({"teacher_id": teacher["user_id"], "job_id": {"$ne": None}}, {"_id": 0}).to_list(500)
+    job_ids = list({s["job_id"] for s in students if s.get("job_id")})
+    jobs_list = await db.jobs.find({"job_id": {"$in": job_ids}}, {"_id": 0}).to_list(500)
+    jobs_dict = {j["job_id"]: j for j in jobs_list}
     paid = []
     for s in students:
-        job = await db.jobs.find_one({"job_id": s["job_id"]}, {"_id": 0})
+        job = jobs_dict.get(s["job_id"])
         if not job:
             continue
         amount = float(job["salary"])
@@ -476,13 +479,15 @@ async def pay_all(body: PayAllRequest, teacher: dict = Depends(get_current_teach
     multiplier = -1 if body.is_fine else 1
     delta = multiplier * float(body.amount)
     txn_type = "fine" if body.is_fine else "bonus"
-    results = []
-    for sid in body.student_ids:
-        s = await db.students.find_one({"student_id": sid, "teacher_id": teacher["user_id"]}, {"_id": 0})
-        if not s:
-            continue
-        await db.students.update_one({"student_id": sid}, {"$inc": {"balance": delta}})
-        await db.transactions.insert_one({
+    valid_students = await db.students.find(
+        {"student_id": {"$in": body.student_ids}, "teacher_id": teacher["user_id"]},
+        {"_id": 0, "student_id": 1},
+    ).to_list(500)
+    valid_ids = [s["student_id"] for s in valid_students]
+    if valid_ids:
+        await db.students.update_many({"student_id": {"$in": valid_ids}}, {"$inc": {"balance": delta}})
+        now_iso = datetime.now(timezone.utc).isoformat()
+        await db.transactions.insert_many([{
             "txn_id": f"txn_{uuid.uuid4().hex[:10]}",
             "teacher_id": teacher["user_id"],
             "student_id": sid,
@@ -490,10 +495,9 @@ async def pay_all(body: PayAllRequest, teacher: dict = Depends(get_current_teach
             "amount": delta,
             "category": body.category,
             "note": body.note,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        results.append({"student_id": sid, "amount": delta})
-    return {"results": results, "count": len(results)}
+            "created_at": now_iso,
+        } for sid in valid_ids])
+    return {"results": [{"student_id": sid, "amount": delta} for sid in valid_ids], "count": len(valid_ids)}
 
 @api_router.post("/transfer")
 async def transfer(body: TransferRequest, teacher: dict = Depends(get_current_teacher)):
