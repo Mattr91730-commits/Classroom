@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { api, API } from "@/lib/api";
+import { useEffect, useState, useCallback } from "react";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { Package } from "lucide-react";
 
@@ -7,11 +7,11 @@ export default function StudentStore() {
   const [items, setItems] = useState([]);
   const [me, setMe] = useState(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [i, m] = await Promise.all([api.get("/store/items"), api.get("/me/student")]);
     setItems(i.data); setMe(m.data);
-  };
-  useEffect(()=>{ load(); },[]);
+  }, []);
+  useEffect(()=>{ load(); },[load]);
 
   const buy = async (it) => {
     if (!confirm(`Buy ${it.name} for $${it.price}?`)) return;

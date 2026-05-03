@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -13,19 +13,23 @@ export default function Dashboard() {
   const [showPayAll, setShowPayAll] = useState(false);
   const [paying, setPaying] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [s, j, t] = await Promise.all([
       api.get("/students"),
       api.get("/jobs"),
       api.get("/transactions"),
     ]);
     setStudents(s.data); setJobs(j.data); setTxns(t.data);
-  };
-  useEffect(() => { load(); }, []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const total = students.reduce((a, s) => a + (s.balance || 0), 0);
   const employed = students.filter(s => s.job_id).length;
   const sym = user?.currency_symbol || "$";
+  const topStudents = useMemo(
+    () => [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0)).slice(0, 8),
+    [students],
+  );
 
   const paySalaries = async () => {
     if (!confirm("Pay weekly salary to all employed students?")) return;
@@ -67,7 +71,7 @@ export default function Dashboard() {
           <h3 className="font-teacher-heading font-semibold text-slate-900 mb-4">Top balances</h3>
           {students.length === 0 ? <Empty msg="No students yet. Add some in Students."/> : (
             <div className="divide-y divide-slate-100">
-              {[...students].sort((a,b)=>b.balance-a.balance).slice(0,8).map(s=>(
+              {topStudents.map(s=>(
                 <div key={s.student_id} className="py-2.5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-slate-100 grid place-items-center text-slate-700 font-semibold">{s.name[0]?.toUpperCase()}</div>

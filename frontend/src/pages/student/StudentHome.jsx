@@ -1,24 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { motion } from "framer-motion";
 import { Coins, Receipt } from "lucide-react";
+
+const HERO_INITIAL = { y: -10, opacity: 0 };
+const HERO_ANIMATE = { y: 0, opacity: 1 };
+const BALANCE_INITIAL = { scale: 0.92 };
+const BALANCE_ANIMATE = { scale: 1 };
 
 export default function StudentHome() {
   const [data, setData] = useState(null);
   const [bills, setBills] = useState([]);
   const [txns, setTxns] = useState([]);
-  useEffect(() => {
-    Promise.all([api.get("/me/student"), api.get("/me/bills-due"), api.get("/transactions")])
-      .then(([m,b,t]) => { setData(m.data); setBills(b.data); setTxns(t.data); });
+  const load = useCallback(async () => {
+    const [m, b, t] = await Promise.all([api.get("/me/student"), api.get("/me/bills-due"), api.get("/transactions")]);
+    setData(m.data); setBills(b.data); setTxns(t.data);
   }, []);
+  useEffect(() => { load(); }, [load]);
   if (!data) return <div className="text-center py-20 font-bold">Loading…</div>;
   const { student, job } = data;
 
   return (
     <div className="space-y-6">
-      <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="card-brutal bg-yellow-300 p-7 relative overflow-hidden">
+      <motion.div initial={HERO_INITIAL} animate={HERO_ANIMATE} className="card-brutal bg-yellow-300 p-7 relative overflow-hidden">
         <div className="text-sm font-bold text-black/70">YOUR BALANCE</div>
-        <motion.div key={student.balance} initial={{ scale: 0.92 }} animate={{ scale: 1 }} className="text-7xl font-bold text-black mt-1 leading-none">${student.balance.toFixed(2)}</motion.div>
+        <motion.div key={student.balance} initial={BALANCE_INITIAL} animate={BALANCE_ANIMATE} className="text-7xl font-bold text-black mt-1 leading-none">${student.balance.toFixed(2)}</motion.div>
         <div className="mt-4 flex flex-wrap gap-2">
           {job ? <div className="card-brutal bg-white px-3 py-1.5 text-sm font-bold">💼 {job.title} · +${job.salary}/wk</div> : <div className="card-brutal bg-white px-3 py-1.5 text-sm font-bold">No job yet — apply!</div>}
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { JOB_ICONS } from "@/pages/teacher/Jobs";
@@ -11,11 +11,11 @@ export default function StudentJobs() {
   const [application, setApplication] = useState(null);
   const [answers, setAnswers] = useState([]);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [j, m] = await Promise.all([api.get("/me/jobs-available"), api.get("/me/student")]);
     setJobs(j.data); setMe(m.data);
-  };
-  useEffect(()=>{ load(); },[]);
+  }, []);
+  useEffect(()=>{ load(); },[load]);
 
   const openApply = async (job) => {
     setApplying(job);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -15,11 +15,11 @@ export default function Students() {
   const [start, setStart] = useState(0);
   const sym = user?.currency_symbol || "$";
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [s, j] = await Promise.all([api.get("/students"), api.get("/jobs")]);
     setStudents(s.data); setJobs(j.data);
-  };
-  useEffect(() => { load(); }, []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const create = async () => {
     if (!name) return toast.error("Name required");

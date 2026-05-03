@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { api } from "../lib/api";
 
 const AuthContext = createContext(null);
@@ -30,22 +30,26 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, [checkAuth]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await api.post("/auth/logout");
     } catch (err) {
-      console.error("Logout request failed:", err);
+      // Network failure during logout is non-fatal; we still clear local state.
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Logout request failed:", err);
+      }
     }
     setUser(null);
     setRole(null);
     window.location.href = "/";
-  };
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, role, loading, setUser, setRole, refresh: checkAuth, logout }}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({ user, role, loading, setUser, setRole, refresh: checkAuth, logout }),
+    [user, role, loading, checkAuth, logout],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

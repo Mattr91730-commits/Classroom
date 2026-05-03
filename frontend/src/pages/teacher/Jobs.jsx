@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -15,11 +15,11 @@ export default function Jobs() {
   const [editing, setEditing] = useState(null);
   const sym = user?.currency_symbol || "$";
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [j, a] = await Promise.all([api.get("/jobs"), api.get("/applications")]);
     setJobs(j.data); setApps(a.data);
-  };
-  useEffect(() => { load(); }, []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const save = async (data) => {
     if (data.job_id) await api.put(`/jobs/${data.job_id}`, data);

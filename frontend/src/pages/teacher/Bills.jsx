@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -14,11 +14,11 @@ export default function Bills() {
   const [selected, setSelected] = useState({});
   const sym = user?.currency_symbol || "$";
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const [b,s] = await Promise.all([api.get("/bills"), api.get("/students")]);
     setBills(b.data); setStudents(s.data);
-  };
-  useEffect(()=>{ load(); },[]);
+  }, []);
+  useEffect(()=>{ load(); },[load]);
 
   const create = async () => { await api.post("/bills",{name,amount:Number(amount),description:desc}); setName("");setAmount(0);setDesc("");setShow(false); load(); };
   const del = async (id) => { if(confirm("Delete?")){await api.delete(`/bills/${id}`); load();} };

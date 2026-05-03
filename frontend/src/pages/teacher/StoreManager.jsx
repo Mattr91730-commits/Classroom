@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api, API } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -10,8 +10,8 @@ export default function StoreManager() {
   const [editing, setEditing] = useState(null);
   const sym = user?.currency_symbol || "$";
 
-  const load = async () => { setItems((await api.get("/store/items")).data); };
-  useEffect(() => { load(); }, []);
+  const load = useCallback(async () => { setItems((await api.get("/store/items")).data); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const save = async (data) => {
     if (data.item_id) await api.put(`/store/items/${data.item_id}`, data);
