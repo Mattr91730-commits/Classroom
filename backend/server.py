@@ -206,7 +206,7 @@ api_router = APIRouter(prefix="/api")
 
 @app.on_event("startup")
 async def startup():
-    init_storage()
+    pass
     # ensure indexes
     await db.teachers.create_index("user_id", unique=True)
     await db.teachers.create_index("classroom_username", unique=True, sparse=True)
