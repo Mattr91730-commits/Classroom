@@ -1,6 +1,6 @@
 """
 My Classroom Economy Backend - FastAPI server
-Classroom economy app with Emergent Google Auth (teachers) and PIN auth (students).
+Classroom economy app with Google Auth (teachers) and PIN auth (students).
 """
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response, UploadFile, File, Form, Header, Query
 from fastapi.responses import Response as FastAPIResponse
@@ -28,26 +28,10 @@ client = MongoClient(mongo_url)
 db_name = os.getenv("DB_NAME", "test")
 db = client[db_name]
 APP_NAME = os.environ.get('APP_NAME', 'classbank')
-EMERGENT_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
-STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
-EMERGENT_AUTH_URL = "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Storage state
-storage_key: Optional[str] = None
-
-def init_storage() -> Optional[str]:
-    global storage_key
-    if storage_key:
-        return storage_key
-    try:
-        resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
-        resp.raise_for_status()
-        storage_key = resp.json()["storage_key"]
-        logger.info("Storage initialized")
-        return storage_key
     except Exception as e:
         logger.error(f"Storage init failed: {e}")
         return None
