@@ -32,10 +32,6 @@ APP_NAME = os.environ.get('APP_NAME', 'classbank')
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-    except Exception as e:
-        logger.error(f"Storage init failed: {e}")
-        return None
-
 def put_object(path: str, data: bytes, content_type: str) -> dict:
     key = init_storage()
     if not key:
