@@ -5,8 +5,7 @@ import { Coins, GraduationCap, Sparkles, Wallet, Briefcase, Store } from "lucide
 export default function Landing() {
   import { api } from "../lib/api";
 
-const handleTeacherLogin = async () => {
-  await api.post("/auth/google/session", { session_id: "test123" });
+const handleTeacherLogin = () => {
   window.location.href = "/teacher";
 };
 
