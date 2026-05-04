@@ -228,8 +228,7 @@ async def google_session(request: Request, response: Response):
     session_id = body.get("session_id")
     if not session_id:
         raise HTTPException(status_code=400, detail="Missing session_id")
-    r = requests.get(EMERGENT_AUTH_URL, headers={"X-Session-ID": session_id}, timeout=30)
-    if r.status_code != 200:
+    # Skipping external auth (removed emergent dependency)
         raise HTTPException(status_code=401, detail="Invalid session_id")
     data = r.json()
     email = data["email"]
