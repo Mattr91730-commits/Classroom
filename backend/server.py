@@ -194,6 +194,12 @@ async def get_current_student(request: Request) -> dict:
 
 # ============ App ============
 app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"status": "backend is working"}
+
+api_router = APIRouter(prefix="/api")
 api_router = APIRouter(prefix="/api")
 
 @app.on_event("startup")
