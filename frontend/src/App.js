@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import Landing from "@/pages/Landing";
-import AuthCallback from "@/pages/AuthCallback";
 import StudentLogin from "@/pages/StudentLogin";
 import TeacherApp from "@/pages/teacher/TeacherApp";
 import StudentApp from "@/pages/student/StudentApp";
@@ -24,7 +23,6 @@ function ProtectedStudent({ children }) {
 
 function AppRouter() {
   const location = useLocation();
-  if (location.hash?.includes("session_id=")) return <AuthCallback />;
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
