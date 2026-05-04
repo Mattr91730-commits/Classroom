@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { Coins, GraduationCap, Sparkles, Wallet, Briefcase, Store } from "lucide-react";
 
 export default function Landing() {
-  const handleTeacherLogin = () => {
-    const redirectUrl = window.location.origin + "/teacher";
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
-  };
+  import { api } from "@/lib/api";
+
+const handleTeacherLogin = async () => {
+  await api.post("/auth/google/session", { session_id: "test123" });
+  window.location.href = "/teacher";
+};
 
   return (
     <div className="min-h-screen bg-slate-50 grid-bg font-teacher-body">
