@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { api } from "./lib/api";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 import { DollarSign, Users, Briefcase, ListTree, Banknote, Plus } from "lucide-react";
 import PayAllModal from "./components/PayAllModal";
