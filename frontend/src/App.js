@@ -1,11 +1,14 @@
-import "@/App.css";
+import "./App.css";
+
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Toaster } from "sonner";
-import Landing from "@/pages/Landing";
-import StudentLogin from "@/pages/StudentLogin";
-import TeacherApp from "@/pages/teacher/TeacherApp";
-import StudentApp from "@/pages/student/StudentApp";
+
+import Landing from "./pages/Landing";
+import StudentLogin from "./pages/StudentLogin";
+import TeacherApp from "./pages/teacher/TeacherApp";
+import StudentApp from "./pages/student/StudentApp";
 
 function ProtectedTeacher({ children }) {
   const { loading, role } = useAuth();
