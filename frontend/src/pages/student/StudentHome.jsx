@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { api } from "@/lib/api";
+import { api } from "../../lib/api";
 import { motion } from "framer-motion";
 import { Coins, Receipt } from "lucide-react";
 
