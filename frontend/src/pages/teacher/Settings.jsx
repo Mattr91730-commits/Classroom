@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api } from "./lib/api";
+import { api } from "../../lib/api";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 
