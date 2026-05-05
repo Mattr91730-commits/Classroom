@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { api } from "./lib/api";
+import { api } from "../../lib/api";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 import { Plus, Trash2, UserPlus, Eye } from "lucide-react";
