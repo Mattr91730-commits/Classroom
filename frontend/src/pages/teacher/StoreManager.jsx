@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { api, API } from "./lib/api";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, ImagePlus, Package } from "lucide-react";
 
