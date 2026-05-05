@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { api } from "./lib/api";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, Briefcase, BookOpen, Library, Calculator, Coins, Hammer, Wrench, Pen, Mail, Star, Crown, Heart, Sun, Music, Trees, Beaker, Gamepad2, Trophy, Megaphone, Computer, ChefHat, Truck, Stethoscope } from "lucide-react";
 
