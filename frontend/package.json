@@ -58,8 +58,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "react-scripts build"
-    "test": "craco test"
+    "build": "react-scripts build",
+"test": "craco test"
   },
   "browserslist": {
     "production": [
