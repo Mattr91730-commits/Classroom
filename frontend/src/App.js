@@ -11,9 +11,6 @@ import TeacherApp from "./pages/teacher/TeacherApp";
 import StudentApp from "./pages/student/StudentApp";
 
 function ProtectedTeacher({ children }) {
-  const { loading, role } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-500">Loading…</div>;
-  if (role !== "teacher") return <Navigate to="/" replace />;
   return children;
 }
 
