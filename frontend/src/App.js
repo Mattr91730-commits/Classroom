@@ -15,9 +15,6 @@ function ProtectedTeacher({ children }) {
 }
 
 function ProtectedStudent({ children }) {
-  const { loading, role } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-500">Loading…</div>;
-  if (role !== "student") return <Navigate to="/student-login" replace />;
   return children;
 }
 
