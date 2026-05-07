@@ -24,7 +24,7 @@ function AppRouter() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/student-login" element={<StudentLogin />} />
-      <Route path="/teacher/*" element={<ProtectedTeacher><TeacherApp /></ProtectedTeacher>} />
+      <Route path="/teacher/*" element={<div>Teacher Route Works</div>} />
       <Route path="/student/*" element={<ProtectedStudent><StudentApp /></ProtectedStudent>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
