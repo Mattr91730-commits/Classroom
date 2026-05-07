@@ -1,14 +1,12 @@
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 import { Link } from "react-router-dom";
 import { Coins, GraduationCap, Sparkles, Wallet, Briefcase, Store } from "lucide-react";
-import { api } from "../lib/api";
 
 export default function Landing() {
 
-  const handleTeacherLogin = async () => {
-    await api.post("/auth/google/session", { session_id: "test123" });
-    window.location.href = "/teacher";
-  };
+ const handleTeacherLogin = () => {
+  window.location.href = "/teacher";
+};
 
   return (
     <div className="min-h-screen bg-slate-50 grid-bg font-teacher-body">
