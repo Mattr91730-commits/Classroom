@@ -8,7 +8,3 @@ export default function Landing() {
     </div>
   );
 }
-      </main>
-    </div>
-  );
-}
