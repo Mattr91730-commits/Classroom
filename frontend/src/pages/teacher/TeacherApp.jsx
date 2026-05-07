@@ -1,5 +1,5 @@
 import { Routes, Route, NavLink, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { LayoutDashboard, Users, Briefcase, Store, Receipt, ClipboardList, ListTree, Settings, LogOut, Coins } from "lucide-react";
 import Dashboard from "./Dashboard";
 import Students from "./Students";
