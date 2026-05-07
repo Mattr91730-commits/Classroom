@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { api } from "@/lib/api";
+import { api } from "../lib/api";
 import { toast } from "sonner";
 import { ArrowLeft, Delete } from "lucide-react";
 
