@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { api } from "../../lib/api";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { Plus, Trash2, ClipboardList, ChevronDown } from "lucide-react";
 
