@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
-import { api } from "../../lib/api";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { JOB_ICONS } from "../teacher/Jobs";
+import { JOB_ICONS } from "@/teacher/Jobs";
 import { Briefcase } from "lucide-react";
 
 export default function StudentJobs() {
