@@ -1,5 +1,5 @@
 import { Routes, Route, NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { Home, Briefcase, Store, User, LogOut } from "lucide-react";
 import StudentHome from "./StudentHome";
 import StudentJobs from "./StudentJobs";
