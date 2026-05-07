@@ -55,7 +55,7 @@ export default function Landing() {
               className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-5 py-3 rounded-lg transition-colors"
             >
               <GraduationCap className="w-4 h-4" />
-              Sign in as Teacher (Google)
+              Teacher Login Test
             </button>
 
             <Link
