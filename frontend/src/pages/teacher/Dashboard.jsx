@@ -3,7 +3,7 @@ import { api } from "../../lib/api";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
 import { DollarSign, Users, Briefcase, ListTree, Banknote, Plus } from "lucide-react";
-import PayAllModal from "@/components/PayAllModal";
+import PayAllModal from "../../components/PayAllModal";
 
 export default function Dashboard() {
   const { user } = useAuth();
