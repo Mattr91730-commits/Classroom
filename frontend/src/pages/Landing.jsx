@@ -1,12 +1,14 @@
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Coins, GraduationCap, Sparkles, Wallet, Briefcase, Store } from "lucide-react";
 
 export default function Landing() {
 
- const handleTeacherLogin = () => {
-  window.location.href = "/teacher";
-};
+  const navigate = useNavigate();
+
+  const handleTeacherLogin = () => {
+    navigate("/teacher");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 grid-bg font-teacher-body">
