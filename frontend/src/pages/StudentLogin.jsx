@@ -35,7 +35,6 @@ export default function StudentLogin() {
         pin: pinValue,
       });
       navigate("/student");
-      window.location.reload();
     } catch (e) {
       toast.error("Wrong PIN. Try again!");
       setPin("");
