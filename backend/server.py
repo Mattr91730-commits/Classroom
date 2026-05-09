@@ -282,7 +282,7 @@ async def teacher_signup(body: TeacherSignup, response: Response):
         "user": teacher,
         "session_token": session_token
     }
-    @api_router.post("/auth/teacher/login")
+@api_router.post("/auth/teacher/login")
 async def teacher_login(body: TeacherLogin, response: Response):
 
     teacher = await db.teachers.find_one(
