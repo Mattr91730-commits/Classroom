@@ -7,8 +7,8 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handleTeacherLogin = () => {
-    navigate("/teacher");
-  };
+  navigate("/teacher-login");
+};
 
   return (
     <div className="min-h-screen bg-slate-50 grid-bg font-teacher-body">
