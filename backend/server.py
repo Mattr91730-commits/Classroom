@@ -268,15 +268,7 @@ async def teacher_signup(body: TeacherSignup, response: Response):
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    response.set_cookie(
-    key="session_token",
-    value=session_token,
-    httponly=True,
-    secure=False,
-    samesite="lax",
-        path="/",
-        max_age=30 * 24 * 60 * 60,
-    )
+
 
     teacher.pop("password", None)
 
@@ -310,15 +302,7 @@ async def teacher_login(body: TeacherLogin, response: Response):
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    response.set_cookie(
-        key="session_token",
-        value=session_token,
-        httponly=True,
-        secure=True,
-        samesite="none",
-        path="/",
-        max_age=30 * 24 * 60 * 60,
-    )
+
 
     teacher.pop("password", None)
 
