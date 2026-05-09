@@ -37,9 +37,8 @@ export default function TeacherLogin() {
 
     } catch (e) {
 
-      alert(
-        e?.response?.data?.detail || "Login failed"
-      );
+      console.log(e);
+alert(JSON.stringify(e?.response?.data || e.message));
 
     }
   };
