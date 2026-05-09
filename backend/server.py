@@ -211,7 +211,6 @@ def home():
     return {"status": "backend is working"}
 
 api_router = APIRouter(prefix="/api")
-api_router = APIRouter(prefix="/api")
 
 @app.on_event("startup")
 async def startup():
