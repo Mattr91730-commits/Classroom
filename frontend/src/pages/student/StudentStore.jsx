@@ -66,12 +66,10 @@ export default function StudentStore() {
               <div className="aspect-video bg-yellow-100 grid place-items-center border-b-[3px] border-black">
                 {it.image_path ? (
                   <img
-                    src={`${API}/files?path=${encodeURIComponent(
-                      it.image_path
-                    )}`}
-                    alt={it.name}
-                    className="w-full h-full object-cover"
-                  />
+  src={it.image_path}
+  alt={it.name}
+  className="w-full h-full object-cover"
+/>
                 ) : (
                   <Package
                     className="w-12 h-12 text-black/30"
