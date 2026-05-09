@@ -226,6 +226,9 @@ async def root():
     return {"app": "My Classroom Economy", "version": "1.0"}
 
 # ---- Auth ----
+@api_router.get("/test")
+async def test():
+    return {"ok": True}
 @api_router.post("/auth/teacher/signup")
 async def teacher_signup(body: TeacherSignup, response: Response):
 
