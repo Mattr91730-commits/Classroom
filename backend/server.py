@@ -248,7 +248,7 @@ async def teacher_signup(body: TeacherSignup, response: Response):
         "password": body.password,
         "name": body.name,
         "picture": "",
-        "classroom_username": None,
+        "classroom_username": user_id,
         "classroom_name": "My Classroom",
         "currency_symbol": "$",
         "created_at": datetime.now(timezone.utc).isoformat(),
