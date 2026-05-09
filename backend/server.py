@@ -852,24 +852,37 @@ async def bills_due(student: dict = Depends(get_current_student)):
     return bills
 
 # ---- File upload / download ----
-async def upload(file: UploadFile = File(...), teacher: dict = Depends(get_current_teacher)):
-    ext = (file.filename.split(".")[-1] if file.filename and "." in file.filename else "bin").lower()
-    file_id = uuid.uuid4().hex
-    path = f"{APP_NAME}/uploads/{teacher['user_id']}/{file_id}.{ext}"
-    data = await file.read()
+@api_router.post("/upload")
+async def upload(
+    file: UploadFile = File(...),
+    teacher: dict = Depends(get_current_teacher)
+):
     import base64
 
-base64_data = base64.b64encode(data).decode("utf-8")
+    ext = (
+        file.filename.split(".")[-1]
+        if file.filename and "." in file.filename
+        else "bin"
+    ).lower()
 
-result = {
-    "path": path,
-    "size": len(data),
-    "base64": base64_data,
-}
+    file_id = uuid.uuid4().hex
+
+    path = f"{APP_NAME}/uploads/{teacher['user_id']}/{file_id}.{ext}"
+
+    data = await file.read()
+
+    base64_data = base64.b64encode(data).decode("utf-8")
+
+    result = {
+        "path": path,
+        "size": len(data),
+        "base64": base64_data,
+    }
+
     await db.files.insert_one({
-    "file_id": file_id,
-    "storage_path": result["path"],
-    "base64": result["base64"],
+        "file_id": file_id,
+        "storage_path": result["path"],
+        "base64": result["base64"],
         "original_filename": file.filename or "",
         "content_type": file.content_type or "",
         "size": result.get("size", 0),
@@ -877,18 +890,39 @@ result = {
         "is_deleted": False,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    return {"path": result["path"], "file_id": file_id}
 
+    return {
+        "path": result["path"],
+        "file_id": file_id
+    }
+
+
+@api_router.get("/files")
 async def files_serve(path: str):
-    record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
-    if not record:
-        raise HTTPException(status_code=404, detail="File not found")
     import base64
 
-data = base64.b64decode(record["base64"])
+    record = await db.files.find_one(
+        {
+            "storage_path": path,
+            "is_deleted": False
+        },
+        {"_id": 0}
+    )
 
-content_type = record.get("content_type") or "application/octet-stream"
-    return FastAPIResponse(content=data, media_type=record.get("content_type") or content_type)
+    if not record:
+        raise HTTPException(status_code=404, detail="File not found")
+
+    data = base64.b64decode(record["base64"])
+
+    content_type = (
+        record.get("content_type")
+        or "application/octet-stream"
+    )
+
+    return FastAPIResponse(
+        content=data,
+        media_type=content_type
+    )
 
 # ============ Wire up ============
 app.include_router(api_router)
