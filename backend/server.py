@@ -45,6 +45,7 @@ class Teacher(BaseModel):
     user_id: str
     email: str
     name: str
+    password: Optional[str] = None
     picture: Optional[str] = ""
     classroom_username: Optional[str] = None
     classroom_name: Optional[str] = "My Classroom"
