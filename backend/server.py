@@ -51,6 +51,16 @@ class Teacher(BaseModel):
     classroom_name: Optional[str] = "My Classroom"
     currency_symbol: str = "$"
 
+class TeacherSignup(BaseModel):
+    email: str
+    password: str
+    name: str
+
+
+class TeacherLogin(BaseModel):
+    email: str
+    password: str
+
 class ClassroomUpdate(BaseModel):
     classroom_username: Optional[str] = None
     classroom_name: Optional[str] = None
@@ -217,6 +227,61 @@ async def root():
     return {"app": "My Classroom Economy", "version": "1.0"}
 
 # ---- Auth ----
+@api_router.post("/auth/teacher/signup")
+async def teacher_signup(body: TeacherSignup, response: Response):
+
+    existing = await db.teachers.find_one(
+        {"email": body.email},
+        {"_id": 0}
+    )
+
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already exists")
+
+    user_id = f"user_{uuid.uuid4().hex[:12]}"
+
+    teacher = {
+        "user_id": user_id,
+        "email": body.email.lower(),
+        "password": body.password,
+        "name": body.name,
+        "picture": "",
+        "classroom_username": None,
+        "classroom_name": "My Classroom",
+        "currency_symbol": "$",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+    await db.teachers.insert_one(teacher)
+
+    session_token = f"sess_{uuid.uuid4().hex}"
+
+    expires_at = datetime.now(timezone.utc) + timedelta(days=30)
+
+    await db.sessions.insert_one({
+        "session_token": session_token,
+        "user_id": teacher["user_id"],
+        "user_type": "teacher",
+        "expires_at": expires_at.isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        path="/",
+        max_age=30 * 24 * 60 * 60,
+    )
+
+    teacher.pop("password", None)
+
+    return {
+        "user": teacher,
+        "session_token": session_token
+    }
 @api_router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
     body = await request.json()
