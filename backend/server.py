@@ -892,9 +892,9 @@ async def upload(
     })
 
     return {
-        "path": result["path"],
-        "file_id": file_id
-    }
+    "path": f"data:{file.content_type};base64,{base64_data}",
+    "file_id": file_id
+}
 
 
 @api_router.get("/files")
