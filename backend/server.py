@@ -282,6 +282,48 @@ async def teacher_signup(body: TeacherSignup, response: Response):
         "user": teacher,
         "session_token": session_token
     }
+    @api_router.post("/auth/teacher/login")
+async def teacher_login(body: TeacherLogin, response: Response):
+
+    teacher = await db.teachers.find_one(
+        {"email": body.email.lower()},
+        {"_id": 0}
+    )
+
+    if not teacher:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    if teacher.get("password") != body.password:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    session_token = f"sess_{uuid.uuid4().hex}"
+
+    expires_at = datetime.now(timezone.utc) + timedelta(days=30)
+
+    await db.sessions.insert_one({
+        "session_token": session_token,
+        "user_id": teacher["user_id"],
+        "user_type": "teacher",
+        "expires_at": expires_at.isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        path="/",
+        max_age=30 * 24 * 60 * 60,
+    )
+
+    teacher.pop("password", None)
+
+    return {
+        "user": teacher,
+        "session_token": session_token
+    }
 @api_router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
     body = await request.json()
