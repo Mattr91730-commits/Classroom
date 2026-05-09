@@ -857,10 +857,19 @@ async def upload(file: UploadFile = File(...), teacher: dict = Depends(get_curre
     file_id = uuid.uuid4().hex
     path = f"{APP_NAME}/uploads/{teacher['user_id']}/{file_id}.{ext}"
     data = await file.read()
-    result = put_object(path, data, file.content_type or "application/octet-stream")
+    import base64
+
+base64_data = base64.b64encode(data).decode("utf-8")
+
+result = {
+    "path": path,
+    "size": len(data),
+    "base64": base64_data,
+}
     await db.files.insert_one({
-        "file_id": file_id,
-        "storage_path": result["path"],
+    "file_id": file_id,
+    "storage_path": result["path"],
+    "base64": result["base64"],
         "original_filename": file.filename or "",
         "content_type": file.content_type or "",
         "size": result.get("size", 0),
@@ -874,7 +883,11 @@ async def files_serve(path: str):
     record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
     if not record:
         raise HTTPException(status_code=404, detail="File not found")
-    data, content_type = get_object(path)
+    import base64
+
+data = base64.b64decode(record["base64"])
+
+content_type = record.get("content_type") or "application/octet-stream"
     return FastAPIResponse(content=data, media_type=record.get("content_type") or content_type)
 
 # ============ Wire up ============
