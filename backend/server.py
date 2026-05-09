@@ -920,9 +920,12 @@ async def files_serve(path: str):
     )
 
     return FastAPIResponse(
-        content=data,
-        media_type=content_type
-    )
+    content=bytes(data),
+    media_type=content_type,
+    headers={
+        "Cache-Control": "no-cache"
+    }
+)
 
 # ============ Wire up ============
 app.include_router(api_router)
