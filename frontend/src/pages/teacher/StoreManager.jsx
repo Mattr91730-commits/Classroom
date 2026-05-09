@@ -31,7 +31,7 @@ export default function StoreManager() {
         {items.map(it=>(
           <div key={it.item_id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <div className="aspect-video bg-slate-100 grid place-items-center">
-              {it.image_path ? <img src={`${API}/files/${it.image_path}`} alt={it.name} className="w-full h-full object-cover"/> : <Package className="w-10 h-10 text-slate-300"/>}
+              {it.image_path ? <img src={it.image_path} : <Package className="w-10 h-10 text-slate-300"/>}
             </div>
             <div className="p-4">
               <div className="flex items-start justify-between">
