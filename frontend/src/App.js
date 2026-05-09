@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Toaster } from "sonner";
+import TeacherLogin from "./pages/TeacherLogin";
 
 import Landing from "./pages/Landing";
 import StudentLogin from "./pages/StudentLogin";
@@ -23,6 +24,7 @@ function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/teacher-login" element={<TeacherLogin />} />
       <Route path="/student-login" element={<StudentLogin />} />
       <Route path="/teacher/*" element={<TeacherApp />} />
       <Route path="/student/*" element={<StudentApp />} />
