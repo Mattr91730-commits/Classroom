@@ -157,7 +157,10 @@ class TransferRequest(BaseModel):
 
 # ============ Auth helpers ============
 async def get_session_token(request: Request) -> Optional[str]:
-    token = request.cookies.get("session_token")
+    token = (
+    request.cookies.get("session_token")
+    or request.cookies.get("student_session_token")
+)
     if token:
         return token
     auth = request.headers.get("Authorization", "")
@@ -437,7 +440,7 @@ async def student_login(body: StudentLogin, response: Response):
         "expires_at": expires_at.isoformat(),
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    response.set_cookie(key="session_token", value=session_token, httponly=True, secure=True, samesite="none", path="/", max_age=30*24*60*60)
+    response.set_cookie(key="student_session_token", value=session_token, httponly=True, secure=True, samesite="none", path="/", max_age=30*24*60*60)
     student.pop("pin", None)
     return {"user": student, "session_token": session_token}
 
